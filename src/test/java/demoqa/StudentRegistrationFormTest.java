@@ -64,6 +64,7 @@ public class StudentRegistrationFormTest extends TestBase {
     }
 
     @Test
+    @Tag("demoqa")
     @DisplayName("Student registration with only required fields")
     void registrationWithRequiredFieldsTest() {
 
@@ -93,6 +94,7 @@ public class StudentRegistrationFormTest extends TestBase {
     }
 
     @Test
+    @Tag("demoqa")
     @DisplayName("Check validation for empty required fields")
     void checkValidationForEmptyRequiredFieldsTest() {
         step("Open page and click 'Submit' without filling in the fields", () -> {
@@ -109,6 +111,7 @@ public class StudentRegistrationFormTest extends TestBase {
     }
 
     @Test
+    @Tag("demoqa")
     @DisplayName("Check validation for an incomplete phone number")
     void checkValidationForShortPhoneNumberTest() {
         step("Open page, enter an incomplete phone number, and click 'Submit'", () -> {

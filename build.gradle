@@ -6,15 +6,20 @@ group 'org.example'
 version '1.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_11  // Или VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_11  // Или VERSION_1_8
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs = ['-Xlint:deprecation']
 }
 
 repositories {
     mavenCentral()
 }
 
-def allureVersion = "2.19.0"
+def allureVersion = "2.19.0";
 
 allure {
     report {
@@ -28,6 +33,7 @@ allure {
             }
         }
     }
+
 }
 
 compileTestJava {
@@ -39,16 +45,24 @@ dependencies {
             "com.codeborne:selenide:6.19.1",
             "org.junit.jupiter:junit-jupiter:5.10.0",
             'com.github.javafaker:javafaker:1.0.2',
+            'commons-io:commons-io:2.15.0',
+            'com.codeborne:pdf-test:1.5.0',
+            'com.codeborne:xls-test:1.4.3',
+            'com.opencsv:opencsv:5.9',
+            'com.fasterxml.jackson.core:jackson-databind:2.18.2',
+            'org.slf4j:slf4j-simple:2.0.7',
             'io.qameta.allure:allure-selenide:2.19.0',
-            'io.qameta.allure:allure-junit5:2.19.0',
-            'org.slf4j:slf4j-simple:2.0.7'
+            'io.qameta.allure:allure-junit5:2.19.0'
+
     )
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.9.0')
 }
 
 test {
     useJUnitPlatform {
+
         systemProperty "env", "prod"
+
     }
     systemProperties(System.getProperties())
     systemProperty "allure.results.directory", "${project.buildDir}/allure-results"
