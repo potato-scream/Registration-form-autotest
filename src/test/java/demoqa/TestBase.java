@@ -60,46 +60,32 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import helpers.Attach;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class TestBase {
     @BeforeAll
     static void beforeAll() {
+        // Basic browser setup
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.browser = System.getProperty("browser", "chrome");
         Configuration.browserVersion = System.getProperty("version", "120.0");
         Configuration.browserSize = System.getProperty("size","1920x1080");
-        Configuration.browserPosition = "0x0";
         Configuration.pageLoadStrategy = "eager";
 
-        // ИЗМЕНЕНО: Задаем URL для Selenoid напрямую, чтобы не зависеть от параметров
+        // Remote driver setup
         Configuration.remote = "https://user1:1234@selenoid.autotests.cloud/wd/hub";
 
+        // ИЗМЕНЕНО: Временно закомментировали DesiredCapabilities для отладки.
+        // Запускаем тест с минимальной конфигурацией, без запроса VNC и видео.
         /*
-        // Старая гибкая настройка, которая брала данные из параметров Jenkins
-        String selenoidUrl = System.getProperty("selenoidUrl");
-        if (selenoidUrl != null && !selenoidUrl.isEmpty()) {
-            String user = System.getProperty("user");
-            String password = System.getProperty("password");
-
-            if (Objects.nonNull(user) && !user.isEmpty() && Objects.nonNull(password) && !password.isEmpty()) {
-                Configuration.remote = "https://" + user + ":" + password + "@" + selenoidUrl;
-            } else {
-                Configuration.remote = "https://" + selenoidUrl;
-            }
-
-            System.out.println("Connecting to remote Selenoid at: " + Configuration.remote);
-        }
-        */
-
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("selenoid:options", Map.<String, Object>of(
+        capabilities.setCapability("selenoid:options", Map.of(
                 "enableVNC", true,
                 "enableVideo", true
         ));
         Configuration.browserCapabilities = capabilities;
-        Configuration.holdBrowserOpen = true;
+        */
 
+        // Allure listener
         SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
@@ -108,7 +94,9 @@ public class TestBase {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
-        Attach.addVideo();
+        // ИЗМЕНЕНО: Временно закомментировали аттач видео, так как мы его не записываем.
+        // Attach.addVideo();
     }
 }
+
 
