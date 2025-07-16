@@ -46,14 +46,14 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.9.0')
 }
 
-test {
-    useJUnitPlatform()
-    systemProperties(System.getProperties())
-}
+tasks.register('demoqa_test', Test) {
+    useJUnitPlatform {
+        includeTags("demoqa")
 
-tasks.withType(Test).configureEach {
-    useJUnitPlatform()
     systemProperties(System.getProperties())
+
+
+    systemProperty "allure.results.directory", "${project.buildDir}/allure-results"
 
     testLogging {
         lifecycle {
@@ -61,11 +61,4 @@ tasks.withType(Test).configureEach {
             exceptionFormat "short"
         }
     }
-}
-
-tasks.register('demoqa_test', Test) {
-    useJUnitPlatform {
-        includeTags("demoqa")
-    }
-    systemProperties(System.getProperties())
 }
