@@ -4,6 +4,7 @@ import config.ConfigApplier;
 import helpers.Attach;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.selenide.AllureSelenide;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -13,6 +14,8 @@ public class TestBase {
 
     @BeforeAll
     static void beforeAll() {
+        WebDriverManager.chromedriver().setup();
+
         new ConfigApplier().applyConfig();
         SelenideLogger.addListener("AllureSelenide",
                 new AllureSelenide()
@@ -27,6 +30,5 @@ public class TestBase {
         Attach.screenshotAs("Last screenshot");
         Attach.pageSource();
         Attach.browserConsoleLogs();
-        Attach.addVideo();
     }
 }
