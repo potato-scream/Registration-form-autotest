@@ -4,7 +4,7 @@ import org.aeonbits.owner.Config;
 
 @Config.Sources({
         "classpath:${env}.properties",
-        "classpath:ui.properties"
+        "classpath:remote.properties"
 })
 public interface BrowserConfig extends Config {
     @Key("browser") @DefaultValue("chrome")
@@ -18,4 +18,13 @@ public interface BrowserConfig extends Config {
 
     @Key("base.url") @DefaultValue("https://demoqa.com")
     String getBaseUrl();
+
+    @Key("remote.url")
+    String getRemoteUrl();
+
+    @Key("remote.user")
+    String getRemoteUser();
+
+    @Key("remote.password")
+    String getRemotePassword();
 }
