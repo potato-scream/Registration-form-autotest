@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'io.qameta.allure' version '2.10.0'
 }
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 
@@ -14,7 +15,7 @@ repositories {
     mavenCentral()
 }
 
-def allureVersion = "2.19.0";
+def allureVersion = "2.19.0"
 
 allure {
     report {
@@ -38,27 +39,38 @@ dependencies {
     testImplementation(
             "com.codeborne:selenide:6.19.1",
             "org.junit.jupiter:junit-jupiter:5.10.0",
-            'com.github.javafaker:javafaker:1.0.2',
-            'org.slf4j:slf4j-simple:2.0.7',
-            'io.qameta.allure:allure-selenide:2.19.0',
-            'io.qameta.allure:allure-junit5:2.19.0'
+            "com.github.javafaker:javafaker:1.0.2",
+            "org.slf4j:slf4j-simple:2.0.7",
+            "io.qameta.allure:allure-selenide:2.19.0",
+            "io.qameta.allure:allure-junit5:2.19.0",
+            "org.assertj:assertj-core:3.25.3",
+            "org.aeonbits.owner:owner:1.0.12"
     )
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.9.0')
+
+    testCompileOnly("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
-tasks.register('demoqa_test', Test) {
+test {
     useJUnitPlatform {
-        includeTags("demoqa")
+        def tagProp = project.findProperty('tags') as String
+        if (tagProp) {
+            def tagsArr = tagProp.split(',').collect { it.trim() } as String[]
+            includeTags(tagsArr)
+        }
+    }
 
-    systemProperties(System.getProperties())
-
-
+    systemProperty "org.slf4j.simpleLogger.logFile", "System.out"
+    systemProperty "org.slf4j.simpleLogger.defaultLogLevel", "warn"
     systemProperty "allure.results.directory", "${project.buildDir}/allure-results"
 
     testLogging {
         lifecycle {
-            events "started", "skipped", "failed", "standard_error", "standard_out"
+            events "started", "skipped", "failed", "standard_out"
             exceptionFormat "short"
         }
     }
+
+    systemProperties(System.getProperties())
 }
