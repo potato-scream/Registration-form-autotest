@@ -2,10 +2,6 @@ package config;
 
 import com.codeborne.selenide.Configuration;
 import org.aeonbits.owner.ConfigFactory;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.util.Map;
-import java.util.Objects;
 
 import static helpers.Attach.attachAsText;
 
@@ -21,30 +17,19 @@ public class ConfigApplier {
         Configuration.baseUrl = config.getBaseUrl();
         Configuration.pageLoadStrategy = "eager";
 
-        String remoteUrl = config.getRemoteUrl();
-        if (remoteUrl != null && !remoteUrl.isEmpty()) {
-            String user = config.getRemoteUser();
-            String password = config.getRemotePassword();
-            Configuration.remote = "https://" + user + ":" + password + "@" + remoteUrl;
-
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability("selenoid:options", Map.of(
-                    "enableVNC", true,
-                    "enableVideo", true
-            ));
-            Configuration.browserCapabilities = capabilities;
+        if (config.isHeadless()) {
+            Configuration.headless = true;
         }
 
         attachAppliedConfiguration();
     }
 
     private void attachAppliedConfiguration() {
-        String remoteInfo = Configuration.remote != null ? "\nremote.url = " + Configuration.remote : "";
-        attachAsText("Примененная конфигурация:",
+        attachAsText("Applied configuration:",
                 "\nbrowser = " + Configuration.browser +
                         "\nbrowser.version = " + Configuration.browserVersion +
                         "\nbrowser.size = " + Configuration.browserSize +
                         "\nbaseUrl = " + Configuration.baseUrl +
-                        remoteInfo);
+                        "\nheadless = " + Configuration.headless);
     }
 }
