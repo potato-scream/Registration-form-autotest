@@ -42,36 +42,12 @@ dependencies {
             "com.github.javafaker:javafaker:1.0.2",
             "org.slf4j:slf4j-simple:2.0.7",
             "io.qameta.allure:allure-selenide:2.19.0",
-            "io.qameta.allure:allure-junit5:2.19.0",
-            "org.assertj:assertj-core:3.25.3",
-            "org.aeonbits.owner:owner:1.0.12",
-            "io.github.bonigarcia:webdrivermanager:5.8.0"
+            "io.qameta.allure:allure-junit5:2.19.0"
     )
-
-    testCompileOnly("org.projectlombok:lombok:1.18.30")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
 }
 
 test {
-    useJUnitPlatform {
-        def tagProp = project.findProperty('tags') as String
-        if (tagProp) {
-            def tagsArr = tagProp.split(',').collect { it.trim() } as String[]
-            includeTags(tagsArr)
-        }
-    }
-
+    useJUnitPlatform()
     systemProperty "org.slf4j.simpleLogger.logFile", "System.out"
-    systemProperty "org.slf4j.simpleLogger.defaultLogLevel", "warn"
-    systemProperty "allure.results.directory", "${project.buildDir}/allure-results"
-
-    testLogging {
-        lifecycle {
-            events "started", "skipped", "failed", "standard_out"
-            exceptionFormat "short"
-        }
-    }
-
-    systemProperties(System.getProperties())
 }

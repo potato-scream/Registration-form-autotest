@@ -1,28 +1,21 @@
 package demoqa;
 
-import config.ConfigApplier;
-import helpers.Attach;
-
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import helpers.Attach;
 import io.qameta.allure.selenide.AllureSelenide;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 
 public class TestBase {
 
     @BeforeAll
     static void beforeAll() {
-        WebDriverManager.chromedriver().setup();
-
-        new ConfigApplier().applyConfig();
-        SelenideLogger.addListener("AllureSelenide",
-                new AllureSelenide()
-                        .includeSelenideSteps(true)
-                        .screenshots(false)
-                        .savePageSource(false)
-        );
+        // Устанавливаем базовые настройки для локального запуска
+        Configuration.baseUrl = "https://demoqa.com";
+        Configuration.browserSize = "1920x1080";
+        Configuration.pageLoadStrategy = "eager";
+        SelenideLogger.addListener("AllureSelenide", new AllureSelenide());
     }
 
     @AfterEach
